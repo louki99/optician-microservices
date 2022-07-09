@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: account-service
+  cloud:
+    config:
+      uri: http://localhost:7761
+    bus:
+      enabled: 'true'
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${random.uuid}
+server:
+  port: '0'

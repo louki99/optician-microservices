@@ -1,0 +1,13 @@
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          password:
+          username:
+          clone-on-start: true
+          uri: https://github.com/louki99/aio-services
+  application:
+    name: config-server
+server:
+  port: 7761
