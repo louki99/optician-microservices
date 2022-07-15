@@ -1,16 +1,13 @@
 package com.technostack.aio.controller;
 
 
-import com.technostack.aio.dto.RequestDomain;
 import com.technostack.aio.dto.RequestFunction;
 import com.technostack.aio.dto.ResponseFunction;
 import com.technostack.aio.exception.ExceptionHandling;
-import com.technostack.aio.exception.domain.DomainNotFoundException;
 import com.technostack.aio.exception.domain.DomainTypeNotFoundException;
-import com.technostack.aio.model.Domain;
+import com.technostack.aio.exception.domain.FunctionNotFoundException;
 import com.technostack.aio.model.DomainType;
 import com.technostack.aio.model.Function;
-import com.technostack.aio.repository.DomainRepository;
 import com.technostack.aio.repository.DomainTypeRepository;
 import com.technostack.aio.repository.FunctionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,31 +50,18 @@ public class FunctionController extends ExceptionHandling {
         }).orElseThrow(() -> new DomainTypeNotFoundException("domain type : " + requestFunction.getDomain_type_id() + " not found"));
     }
 
+    @PutMapping("/")
+    public Function update(@RequestParam Long functionId, @Valid @RequestBody RequestFunction requestFunction) throws
+            FunctionNotFoundException, DomainTypeNotFoundException {
 
-    @PutMapping("/{functionId}")
-    public ResponseFunction update(@PathVariable Long domainId, @Valid @RequestBody RequestDomain requestDomain) throws
-            DomainNotFoundException {
-        return domainRepository.findById(domainId).map(post -> {
-            post.setName(requestDomain.getName());
-            return domainRepository.save(post);
-        }).orElseThrow(() -> new DomainNotFoundException("DomainId " + domainId + " not found"));
-    }
+        DomainType domainType = domainTypeRepository.findById(requestFunction.getDomain_type_id())
+                .orElseThrow(()->new DomainTypeNotFoundException("domain type : " + requestFunction.getDomain_type_id() + " not found"));
 
-    @PostMapping("type/{domainId}")
-    public DomainType createDomainType(@PathVariable (value = "domainId") Long domainId,
-                                    @Valid @RequestBody DomainType requestDomainType) throws
-            DomainTypeNotFoundException {
-
-
-        return domainRepository.findById(domainId).map(domain -> {
-            DomainType domainType =
-                    DomainType
-                            .builder()
-                            .domain(domain)
-                            .code(UUID.randomUUID().toString())
-                            .name(requestDomainType.getName())
-                            .build();
-            return domainTypeRepository.save(domainType);
-        }).orElseThrow(() -> new DomainTypeNotFoundException("domain " + domainId + " not found"));
+        return functionRepository.findById(functionId).map(function -> {
+            function.setName(requestFunction.getName());
+            function.setDomainType(domainType);
+            function.setOs(requestFunction.getOs());
+            return functionRepository.save(function);
+        }).orElseThrow(() -> new FunctionNotFoundException("FunctionId : " + functionId + " not found"));
     }
 }
