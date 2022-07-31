@@ -1,7 +1,7 @@
 package com.technostack.aio.controller;
 
 
-import com.technostack.aio.dto.RequestDomain;
+import com.technostack.aio.dto.request.RequestDomain;
 import com.technostack.aio.exception.ExceptionHandling;
 import com.technostack.aio.exception.domain.DomainNotFoundException;
 import com.technostack.aio.exception.domain.DomainTypeNotFoundException;
@@ -10,7 +10,6 @@ import com.technostack.aio.model.DomainType;
 import com.technostack.aio.repository.DomainRepository;
 import com.technostack.aio.repository.DomainTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;

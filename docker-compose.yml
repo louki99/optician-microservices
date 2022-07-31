@@ -1,0 +1,73 @@
+version: '3'
+services:
+  db:
+    container_name: postgres-container
+    image: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: postgres_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      PGDATA: /var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    container_name: pgadmin4-container
+    image: dpage/pgadmin4:5.5
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: secret
+      PGADMIN_LISTEN_PORT: 80
+    ports:
+      - "1008:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - net-aio
+    hostname: zipkin-host
+    container_name: zipkin-container
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - keycloak_mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: keycloak
+      MYSQL_USER: keycloak
+      MYSQL_PASSWORD: password
+    networks:
+      - net-aio
+  keycloak:
+    image: quay.io/keycloak/keycloak:legacy
+    environment:
+      DB_VENDOR: MYSQL
+      DB_ADDR: mysql
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_PASSWORD: password
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: Pa55w0rd
+    ports:
+      - "9080:8080"
+    networks:
+      - net-aio
+    depends_on:
+      - mysql
+    container_name: keycloak-container
+    hostname: keycloak-host
+
+volumes:
+  db-data:
+  pgadmin-data:
+  keycloak_mysql_data:
+
+networks:
+  net-aio:
+    driver: bridge

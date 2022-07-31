@@ -1,21 +1,11 @@
 package com.technostack.aio.controller;
 
 
-import com.technostack.aio.dto.RequestDomain;
-import com.technostack.aio.dto.RequestProfile;
-import com.technostack.aio.dto.RequestTache;
-import com.technostack.aio.dto.ResponseTache;
+import com.technostack.aio.dto.request.RequestTache;
+import com.technostack.aio.dto.response.ResponseTache;
 import com.technostack.aio.exception.ExceptionHandling;
-import com.technostack.aio.exception.domain.DomainNotFoundException;
-import com.technostack.aio.exception.domain.DomainTypeNotFoundException;
 import com.technostack.aio.exception.domain.TacheNotFoundException;
-import com.technostack.aio.model.Domain;
-import com.technostack.aio.model.DomainType;
-import com.technostack.aio.model.Profile;
 import com.technostack.aio.model.Tache;
-import com.technostack.aio.repository.DomainRepository;
-import com.technostack.aio.repository.DomainTypeRepository;
-import com.technostack.aio.repository.ProfileRepository;
 import com.technostack.aio.repository.TacheRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

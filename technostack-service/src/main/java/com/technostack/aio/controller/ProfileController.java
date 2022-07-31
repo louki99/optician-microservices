@@ -1,15 +1,15 @@
 package com.technostack.aio.controller;
 
 
-import com.technostack.aio.dto.RequestProfile;
+import com.technostack.aio.dto.request.RequestProfile;
 import com.technostack.aio.exception.ExceptionHandling;
 import com.technostack.aio.exception.domain.DomainNotFoundException;
 import com.technostack.aio.exception.domain.DomainTypeNotFoundException;
-import com.technostack.aio.model.Domain;
-import com.technostack.aio.model.DomainType;
-import com.technostack.aio.model.Profile;
+import com.technostack.aio.exception.domain.FunctionNotFoundException;
+import com.technostack.aio.model.*;
 import com.technostack.aio.repository.DomainRepository;
 import com.technostack.aio.repository.DomainTypeRepository;
+import com.technostack.aio.repository.FunctionRepository;
 import com.technostack.aio.repository.ProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,6 +33,11 @@ public class ProfileController extends ExceptionHandling {
     private DomainTypeRepository domainTypeRepository;
 
 
+    @Autowired
+    private FunctionRepository functionRepository;
+
+
+
     @GetMapping("/")
     public Page<Profile> getAllProfiles(Pageable pageable) {
         return profileRepository.findAll(pageable);
@@ -49,7 +54,6 @@ public class ProfileController extends ExceptionHandling {
         DomainType domainType = domainTypeRepository.findById(requestProfile.getDomain_type_id())
                 .orElseThrow(()-> new DomainTypeNotFoundException("domain type not found"));
 
-
         Profile profile =
                 Profile
                         .builder()
@@ -60,6 +64,27 @@ public class ProfileController extends ExceptionHandling {
                         .build();
 
         return profileRepository.save(profile);
+    }
+
+    @PutMapping("/")
+    public Profile update(@RequestParam Long profileId, @Valid @RequestBody RequestProfile requestProfile) throws
+            DomainNotFoundException,
+            DomainTypeNotFoundException,
+            FunctionNotFoundException
+            {
+
+        Domain domain = domainRepository.findById(requestProfile.getDomain_id())
+                .orElseThrow(()-> new DomainNotFoundException("domain not found"));
+
+        DomainType domainType = domainTypeRepository.findById(requestProfile.getDomain_type_id())
+                .orElseThrow(()-> new DomainTypeNotFoundException("domain type not found"));
+
+        return profileRepository.findById(profileId).map(profile -> {
+            profile.setName(requestProfile.getName());
+            profile.setDomain(domain);
+            profile.setDomainType(domainType);
+            return profileRepository.save(profile);
+        }).orElseThrow(() -> new FunctionNotFoundException("Profile Id : " + profileId + " not found"));
     }
 
 }

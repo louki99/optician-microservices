@@ -13,6 +13,8 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "ad_profile")
@@ -23,6 +25,7 @@ import javax.validation.constraints.Size;
 public class Profile extends  AuditModel {
 
     @Id
+    @Column(name = "profile_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -48,4 +51,13 @@ public class Profile extends  AuditModel {
     @JsonIgnore
     private DomainType domainType;
 
+    @OneToMany(mappedBy = "profile")
+    Set<ProfileFunction> profileFunctions;
+
+    @OneToMany(mappedBy = "profile")
+    Set<ProfileCategoryProductFamily> categoryProductFamilies;
+
+
+    @OneToMany(mappedBy = "profile")
+    Set<ProfileModalityPayment> profileModalityPayments;
 }

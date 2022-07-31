@@ -62,6 +62,30 @@ public class ExceptionHandling implements ErrorController {
 		return createHttpResponse(NOT_FOUND, exception.getMessage());
 	}
 
+	@ExceptionHandler(ProfileNotFoundException.class)
+	public ResponseEntity<HttpResponse> profileNotFoundException(ProfileNotFoundException exception) {
+		LOGGER.error(exception.getMessage());
+		return createHttpResponse(NOT_FOUND, exception.getMessage());
+	}
+
+	@ExceptionHandler(TacheNotFoundException.class)
+	public ResponseEntity<HttpResponse> tacheNotFoundException(TacheNotFoundException exception) {
+		LOGGER.error(exception.getMessage());
+		return createHttpResponse(NOT_FOUND, exception.getMessage());
+	}
+
+	@ExceptionHandler(CategoryProductFamilleNotFoundException.class)
+	public ResponseEntity<HttpResponse> categoryProductFamilleNotFoundException(CategoryProductFamilleNotFoundException exception) {
+		LOGGER.error(exception.getMessage());
+		return createHttpResponse(NOT_FOUND, exception.getMessage());
+	}
+
+	@ExceptionHandler(ModalityPaymentNotFoundException.class)
+	public ResponseEntity<HttpResponse> modalityPaymentNotFoundException(ModalityPaymentNotFoundException exception) {
+		LOGGER.error(exception.getMessage());
+		return createHttpResponse(NOT_FOUND, exception.getMessage());
+	}
+
 	@ExceptionHandler(IOException.class)
 	public ResponseEntity<HttpResponse> iOException(IOException exception) {
 		LOGGER.error(exception.getMessage());
