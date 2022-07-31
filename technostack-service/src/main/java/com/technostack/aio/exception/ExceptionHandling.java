@@ -86,6 +86,12 @@ public class ExceptionHandling implements ErrorController {
 		return createHttpResponse(NOT_FOUND, exception.getMessage());
 	}
 
+	@ExceptionHandler(GeoAreaTypeNotFoundException.class)
+	public ResponseEntity<HttpResponse> geoAreaTypeNotFoundException(GeoAreaTypeNotFoundException exception) {
+		LOGGER.error(exception.getMessage());
+		return createHttpResponse(NOT_FOUND, exception.getMessage());
+	}
+
 	@ExceptionHandler(IOException.class)
 	public ResponseEntity<HttpResponse> iOException(IOException exception) {
 		LOGGER.error(exception.getMessage());
